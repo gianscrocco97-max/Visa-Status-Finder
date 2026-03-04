@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visa Status Finder</title>
+
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <!-- HEADER + NAV -->
+    <header>
+      <div class="header-box">
+        <h1>Visa Status Finder</h1>
+        <nav>
+          <a href="#" onclick="showSection('single', this); return false;">Single Trip</a>
+          <a href="#" onclick="showSection('multi', this); return false;">Multi Trip</a>
+          <a href="#" onclick="showSection('passports', this); return false;">Passport Info</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- WELCOME -->
+    <main id="welcome">
+      <h3 class="welcome-title">Welcome to Visa Status Finder</h3>
+
+      <p class="welcome-paragraph welcome-paragraph--spaced">
+        This website helps you quickly check if you need a visa based on your passport(s) and travel route.
+        Simply select your passport(s) and destinations to see whether a visa is required and how long you
+        can stay.
+      </p>
+
+      <ul class="welcome-list">
+        <li class="welcome-list-item">
+          <b>Single Trip:</b> Check if you need a visa for a single trip by selecting your main passport,
+          an optional secondary passport, your departure country, connection stops, and the final destination.
+        </li>
+
+        <li class="welcome-list-item">
+          <b>Multi Trip:</b> Check if you need a visa for multiple destinations using the same passports,
+          all in one place.
+        </li>
+
+        <li class="welcome-list-item">
+          <b>Passport Info:</b> View the visa status for each destination based on a specific passport,
+          including permitted length of stay.
+        </li>
+
+        <li class="welcome-list-item">
+          <b>Main Passport:</b> The passport you normally travel with.
+        </li>
+
+        <li class="welcome-list-item welcome-list-item--last">
+          <b>Secondary Passport:</b> Use this option to compare if another passport offers better travel access.
+        </li>
+      </ul>
+
+      <p class="welcome-paragraph welcome-paragraph--spaced">
+        <b></b>This information is constantly reviewed and updated, however, it is provided for general guidance only.
+      </p>
+      
+      <div class="welcome-start">
+        <button class="start-button" onclick="backTo('single')">Start</button>
+      </div>
+    </main>
+
+    <!-- SINGLE TRIP -->
+    <main id="single">
+      <div class="info-box"; style= " color: rgb(255, 255, 255);";>
+        Here you can check visa state for a single trip with optional connections.
+      </div>
+
+      <div class="passport-box">
+        <h3 style="text-align:center;">Select your passports</h3>
+
+        <div class="form-group">
+          <label for="passport1">Main Passport:</label>
+          <select id="passport1" data-countries-select="1">
+            <option value="">-- Select a passport --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="passport2">Secondary Passport:</label>
+          <select id="passport2" data-countries-select="1">
+            <option value="">-- Select a passport --</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="departure">Departure country:</label>
+        <select id="departure" data-countries-select="1">
+          <option value="">-- Select a country --</option>
+        </select>
+      </div>
+
+      <div id="connections-container">
+        <div class="form-group" id="connection-wrap-1">
+          <label for="connection1">1st Connection:</label>
+          <select id="connection1" data-countries-select="1">
+            <option value="">-- Select a country --</option>
+          </select>
+        </div>
+
+        <div class="btn-container" id="connection-buttons">
+          <button type="button" onclick="addConnection()" class="back-btn">Add connection</button>
+          <button type="button" onclick="removeConnection()" class="danger-btn">Remove last connection</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="destination">Final destination:</label>
+        <select id="destination" data-countries-select="1">
+          <option value="">-- Select a country --</option>
+        </select>
+      </div>
+
+      <div class="btn-container">
+        <button onclick="searchVisas()" class="search-btn">Search</button>
+      </div>
+    </main>
+
+    <!-- SINGLE RESULTS -->
+    <main id="resultados">
+      
+      <section class="resultado-box" aria-label="Search inputs summary">
+        <h3 class="resultado-titulo-interno">Search Summary</h3>
+        <div id="resultadoTexto"></div>
+      </section>
+
+
+      <section class="resultado-box" aria-label="Visa results">
+        <h3 class="resultado-titulo-interno">Visa Results</h3>
+        <div id="resultadoVisa"></div>
+
+        <div class="btn-container">
+          <button onclick="backTo('single')" class="back-btn">Back</button>
+        </div>
+      </section>
+
+      
+    </main>
+
+    <!-- MULTI TRIP -->
+    <main id="multi">
+      <div class="info-box"; style= " color: rgb(255, 255, 255);";>
+        Here you can compare visa state across multiple destinations using the same passports.
+      </div>
+
+      <div class="passport-box">
+        <h3 style="text-align:center;">Select your passports</h3>
+
+        <div class="form-group">
+          <label for="passport1-multi">Main Passport:</label>
+          <select id="passport1-multi" data-countries-select="1">
+            <option value="">-- Select a passport --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="passport2-multi">Secondary Passport:</label>
+          <select id="passport2-multi" data-countries-select="1">
+            <option value="">-- Select a passport --</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="destinations-container">
+        <div class="form-group" id="destination-wrap-1">
+          <label for="destination1">1st Destination:</label>
+          <select id="destination1" data-countries-select="1">
+            <option value="">-- Select a destination --</option>
+          </select>
+        </div>
+
+        <div class="btn-container" id="destination-buttons">
+          <button type="button" onclick="addDestination()" class="back-btn">Add destination</button>
+          <button type="button" onclick="removeDestination()" class="danger-btn">Remove last destination</button>
+        </div>
+      </div>
+
+      <div class="btn-container">
+        <button onclick="searchMultiTrip()" class="search-btn">Search</button>
+      </div>
+    </main>
+
+    <!-- MULTI RESULTS -->
+    <main id="multi-resultados">
+
+      <div id="resultadoMultiTexto"></div>
+
+      <div class="btn-container">
+       <button onclick="backTo('multi')" class="back-btn">Back</button>
+      </div>
+          
+    </main>
+
+    <!-- PASSPORT INFO -->
+    <main id="passports">
+      <div class="info-box"; style= " color: rgb(255, 255, 255);";>
+        Here you can view visa status and allowed days for the selected passport.
+      </div>
+
+      <div class="form-group">
+        <label for="PassInfo">Passport:</label>
+        <select id="PassInfo" data-countries-select="1">
+          <option value="">-- Select a passport --</option>
+        </select>
+
+        <div class="btn-container">
+          <button class="search-btn" onclick="showPassportInfo()">Search</button>
+        </div>
+      </div>
+
+      <div id="passport-result" class="info-layout" style="display:none;">
+        <div class="info-images">
+          <img id="img-bandera" src="" alt="Flag" />
+        </div>
+
+        <div class="info-text">
+          <h2 id="info-titulo">Selected country</h2>
+          <div id="tabla-visa-container"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- DONATIONS -->
+    <main id="donations">
+      <div class="support-box">
+        <h2>🤍 Thank you for your support 🤍</h2>
+        <p style="margin-top:6px;font-size:20px;">
+        </p>
+      </div>
+
+      <div class="donation-box">
+         <h2>Please select one of the options below.</h2> 
+        <div class="currency-section">
+          <h3 style="text-decoration: underline;">Currency</h3>
+
+          <ul class="payment-row">
+            <li>
+              <h3 style="text-decoration: underline;">PayPal</h3>
+
+              <img
+                src="https://www.paypalobjects.com/webstatic/icon/pp258.png"
+                alt="PayPal"
+                class="qr-img"
+              />
+
+              <div id="donate-button-container">
+                <div id="donate-button"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="crypto-section">
+          <h3 style="text-decoration: underline;">Crypto</h3>
+
+          <ul class="payment-row">
+            <li>
+              <h3 style="text-decoration: underline;">Exodus</h3>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Exodus_Wallet_Logo.png" class="qr-img" alt="Exodus" />
+              <button class="donate-btn" onclick="goToSection('exodus-main')">Donate</button>
+            </li>
+
+            <li>
+              <h3 style="text-decoration: underline;">Phantom</h3>
+              <img src="https://academy-public.coinmarketcap.com/optimized-uploads/242264094c2f476983512c1ead9bd3d6.png" class="qr-img" alt="Phantom" />
+              <button class="donate-btn" onclick="goToSection('phantom-main')">Donate</button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="support-box-2">
+          <p style="margin-top:6px;font-size:15px;">
+            If you have any suggestions, ideas, or identify any inaccuracies within the information
+            provided, I kindly invite you to share your feedback via the email address indicated below.
+            <br />
+            For security reasons, please note that file attachments will not be opened or downloaded;
+            therefore, I kindly request that all communications be sent in text format only.
+            <br /><br />
+            Email: visastatusfinder@gmail.com
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <!-- CRYPTO SCREENS  -->
+    <main id="exodus-main" class="crypto-screen">
+     
+      <div class="Crypto-Title">
+        <h2>Exodus</h2>
+      </div>
+
+        <div class="Tokens-main">
+          <h3 style="text-align: center;text-decoration: underline;">Copy the address of the currency you wish to donate.</h3>
+          <br>
+          <li>₿ <strong>Bitcoin (BTC)</strong><br>Address: bc1q7ghezz6zntvulvlmelna64t7drzla8xwlduysq</li><br>
+          <li>⛓️ <strong>Ethereum (ETH)</strong><br>Address: 0xa103170AD91137d9c303B2Bcf4A1006161711477</li><br>
+          <li>🔶 <strong>Binance Coin (BNB)</strong><br>Address: 0xa103170AD91137d9c303B2Bcf4A1006161711477</li><br>
+          <li>💲 <strong>Tether (USDT)</strong><br>Address: 0xa103170AD91137d9c303B2Bcf4A1006161711477</li><br>
+          <li>🏦 <strong>USD Coin (USDC)</strong><br>Address: 0xa103170AD91137d9c303B2Bcf4A1006161711477</li><br>
+          <li>⚡ <strong>Solana (SOL)</strong><br>Address: 5oU5H5WEhiDuJE14aTAj1TBvfBsy4ZwH4o4AGqGFgVtD</li><br>
+          <li>💧  <strong>XRP (Ripple)</strong><br>Address: rGEPUqohtyHRZ8oKepkBqq6PXtRQsChi1D</li><br>
+          <li>🐕 <strong>Dogecoin (DOGE)</strong><br>Address: DNRy5AAQjMMH4bVVfUTYmzhEHbwwsbUUiS</li><br>
+          <li>📡 <strong>Toncoin (TON)</strong><br>Address: UQBjiWCHO-fzuRlZcYs3f_asN4JiAMDutT0FjtcxUuBJFUO1</li><br>
+          <li>🏔️ <strong>Avalanche (AVAX)</strong><br>Address: TAqggg2kPt8eFrimDiNJgg4YuTzhpS9Xo7</li><br>
+          <li>🕸️ <strong>Polkadot (DOT)</strong><br>Address: 12tgTySwQsQBWPvZZiDHdwgdhGMreqS99WVefpGvPV2RzKJW</li><br>
+          <li>🌐 <strong>Tron (TRX)</strong><br>Address: 0x2893Bc0C02aE74b9395C06c10e4e5b06D3090369</li><br>
+          <li>🔗 <strong>Chainlink (LINK)</strong><br>Address: TAqggg2kPt8eFrimDiNJgg4YuTzhpS9Xo7</li><br>
+          <li>⚙️ <strong>Litecoin (LTC)</strong><br>Address: LWhoybQQrxMVGwFWVW9ao13t5oNB8Cs3h2</li><br>
+          <li>🌌 <strong>Cosmos (ATOM)</strong><br>Address: cosmos15ycrpssgjhlgteayrkyg7g3q769h8z0nd2ma3n</li><br>
+        </div>      
+        
+        <button class="donate-btn" onclick="goToSection('donations')">Back</button>
+    </main>
+
+    <main id="phantom-main" class="crypto-screen">
+      
+      <div class="Crypto-Title">
+        <h2>Phantom</h2>
+      </div>
+      
+      <div class="Tokens-main">
+        <h3 style="text-align: center;text-decoration: underline;">Copy the address of the currency you wish to donate.</h3>
+        <br>
+        <li>🟧 <strong>Bitcoin (BTC)</strong><br>Address: bc1pvmjge4f4747l9tmguwgl73x43pe96mnyn9e97xzfz8e7a7ttpdvs3gknta</li><br>
+        <li>⬢  <strong>Ethereum (ETH)</strong><br>Address: 0x3d88E7d16D3c5E1af4956cbeC9fF4A7b8E3D6ACe</li><br>
+        <li>🟡 <strong>Binance Coin (BNB)</strong><br>Address: 9gP2kCy3wA1ctvYWQk75guqXuHfrEomqydHLtcTCqiLa</li><br>
+        <li>💱 <strong>Tether (USDT)</strong><br>Address: 0xdac17f958d2ee523a2206206994597c13d831ec7</li><br>
+        <li>🏦 <strong>USD Coin (USDC)</strong><br>Address: 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48</li><br>
+        <li>☀️ <strong>Solana (SOL)</strong><br>Address: 5hYvjSWthrGvo9cMSULkxDVJ1R79fHoHUHSLemsr56t</li><br>
+        <li>🐕‍🦺 <strong>Dogecoin (DOGE)</strong><br>Address: 0x2541a36be4cd39286ed61a3e6afc2307602489d6</li><br>
+        <li>📨 <strong>Toncoin (TON)</strong><br>Address: 0x582d872a1b094fc48f5de31d3b73f2d9be47def1</li><br>
+        <li>❄️ <strong>Avalanche (AVAX)</strong><br>Address: 0xd6a34b430c05ac78c24985f8abee2616bc1788cb</li><br>
+        <li>🧩 <strong>Polkadot (DOT)</strong><br>Address: 0x196c20da81fbc324ecdf55501e95ce9f0bd84d14</li><br>
+        <li>📶 <strong>Tron (TRX)</strong><br>Address: GbbesPbaYh5uiAZSYNXTc7w9jty1rpg3P9L4JeN4LkKc</li><br>
+        <li>🧷 <strong>Chainlink (LINK)</strong><br>Address: 0x514910771af9ca656af840dff83e8264ecf986ca</li><br>
+        <li>⚪ <strong>Litecoin (LTC)</strong><br>Address: 4ATMKLpL9sBrKFB3GZTFnGkPxvepojU8CVKUSmXHSEWR</li><br>
+        <li>🪐 <strong>Cosmos (ATOM)</strong><br>Address: 0x6e934283dae5d5d1831cbe8d557c44c9b83f30ee</li><br>
+      </div>     
+      
+      <button class="donate-btn" onclick="goToSection('donations')">Back</button>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+
+        <div class="footer-left">
+          <h3>💖 Donation 💖</h3>
+          <p>
+            If you found this information useful, please consider making a donation,
+            it will help me maintain and continuously update this project.
+          </p>
+          <button onclick="showSection('donations')" class="donate-btn"; >Donate</button>
+        </div>
+
+        <div class="footer-right">
+          <h3>Visa Status Finder</h3>
+          <p>
+            Due to constant changes in foreign policies and regulations, visa status are subject to change.
+            This information is constantly reviewed and updated, however, it is provided for general guidance only.
+
+            <br><br>
+            To avoid any unexpected issues I strongly recommend checking official government websites for final confirmation.
+
+          </p>
+        </div>
+       
+      </div>
+
+      <div class="footer-bottom">
+        <span class="footer-rights">All rights reserved</span>
+        <span class="footer-mark">2026 — Visa Status Finder </span>
+        <span class="footer-update">Last update: 03/03/2026 </span>
+      </div>
+
+      
+    </footer>
+
+    <!-- PAYPAL SDK -->
+    <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+
+    <!-- YOUR APP SCRIPT -->
+    <script src="./script.js"></script>
+  </body>
+</html>
